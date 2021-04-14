@@ -13,6 +13,11 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
     messageText: ko.Observable<string>;
     properties: Composite.PropertiesType;
     res: { [key: string]: string };
+    firstNumber: ko.Observable<number>;
+    secondNumber: ko.Observable<number>;
+    operation: ko.Observable<string>;
+    result: ko.Observable<number>;
+    operationsSDP: ko.Observable<any>;
 
     constructor(context: Composite.ViewModelContext<Composite.PropertiesType>) {        
         //At the start of your viewModel constructor
@@ -52,55 +57,19 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
             this.operation = context.properties.operation
         }
 
+        let operations = [
         // Set up form options and values
-        this.operations = [
             { value: "sum",       label: "Sum" },
             { value: "substract", label: "Substract" },
             { value: "divide",    label: "Divide" },
             { value: "multiply",  label: "Multiply" },
-        ]
+        ];
 
-        this.operationsSDP = new ArrayDataProvider(self.operations, {
+        this.operationsSDP = ko.observable(new ArrayDataProvider(operations, {
             keyAttributes: "value",
-        });
+        }));
 
-
-
-        /** Custom defined event */
-        this.onCalculate = function (event) {
-
-            // Do operation
-            switch(self.operation) {
-                case "sum":
-                    self.result = self._add(self.firstNumber, self.secondNumber)
-                    break;
-
-                case "substract":
-                    self.result = self._substract(self.firstNumber, self.secondNumber)
-                    break;
-
-                case "divide":
-                    self.result = self._divide(self.firstNumber, self.secondNumber)
-                    break;
-
-                case "multiply":
-                    self.result = self._multiply(self.firstNumber, self.secondNumber)
-                    break;
-            }
-
-            // Set value to response field
-            var node = document.getElementById("result");
-            var busyContext = oj.Context.getContext(node).getBusyContext();
-
-            busyContext.whenReady().then(function () {
-                var node = document.getElementById("result");
-                node.value = self.result
-            });
-
-            //Raise the custom event
-            self.composite.dispatchEvent(new CustomEvent('onCalculate', {}));
-        };
-
+        
 
 
         // Example for parsing context properties
@@ -110,6 +79,55 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
 
         //Once all startup and async activities have finished, relocate if there are any async activities
         this.busyResolve(); 
+    }
+
+    _add(num1, num2) : ko.Observable<number>{
+        return ko.observable(num1 + num2)
+    }
+
+    _substract(num1, num2) : ko.Observable<number>{
+        return ko.observable(num1 - num2)
+    }
+
+    _divide(num1, num2) : ko.Observable<number>{
+        return ko.observable(num1 / num2)
+    }
+
+    _multiply(num1, num2) : ko.Observable<number>{
+        return ko.observable(num1 * num2)
+    }
+
+    onCalculate(event) {
+        // Do operation
+        switch(this.operation) {
+            case ko.observable("sum"):
+                this.result = this._add(this.firstNumber, this.secondNumber)
+                break;
+
+            case ko.observable("substract"):
+                this.result = this._substract(this.firstNumber, this.secondNumber)
+                break;
+
+            case ko.observable("divide"):
+                this.result = this._divide(this.firstNumber, this.secondNumber)
+                break;
+
+            case ko.observable("multiply"):
+                this.result = this._multiply(this.firstNumber, this.secondNumber)
+                break;
+        }
+
+        // Set value to response field
+        var node: any = document.getElementById("result");
+        var busyContext = Context.getContext(node).getBusyContext();
+
+        busyContext.whenReady().then(function () {
+            var node: any = document.getElementById("result");
+            node.value = this.result
+        });
+
+        //Raise the custom event
+        this.composite.dispatchEvent(new CustomEvent('onCalculate', {}));
     }
 
     //Lifecycle methods - implement if necessary 

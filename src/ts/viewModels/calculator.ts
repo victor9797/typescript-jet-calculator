@@ -1,4 +1,5 @@
 import * as AccUtils from "../accUtils";
+import "basic-calculator/loader";
 class CalculatorViewModel {
 
   constructor() {
