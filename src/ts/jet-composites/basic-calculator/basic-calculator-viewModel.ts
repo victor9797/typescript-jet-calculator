@@ -6,6 +6,11 @@ import Context = require("ojs/ojcontext");
 import Composite = require("ojs/ojcomposite");
 import "ojs/ojknockout";
 import ArrayDataProvider = require("ojs/ojarraydataprovider");
+import "ojs/ojformlayout";
+import "ojs/ojknockout";
+import "ojs/ojselectsingle";
+import "ojs/ojinputnumber";
+import "ojs/ojbutton";
 
 export default class ViewModel implements Composite.ViewModel<Composite.PropertiesType> {
     busyResolve: (() => void);
@@ -18,6 +23,11 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
     operation: ko.Observable<string>;
     result: ko.Observable<number>;
     operationsSDP: ko.Observable<any>;
+    onCalculate: Function;
+    _add: Function;
+    _substract: Function;
+    _multiply: Function;
+    _divide: Function;
 
     constructor(context: Composite.ViewModelContext<Composite.PropertiesType>) {        
         //At the start of your viewModel constructor
@@ -69,65 +79,58 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
             keyAttributes: "value",
         }));
 
-        
 
+        this.onCalculate = (event:Event, model: object): void => {
+            // Do operation
+            switch(this.operation) {
+                case ko.observable("sum"):
+                    this.result = this._add(this.firstNumber, this.secondNumber)
+                    break;
 
-        // Example for parsing context properties
-        // if (context.properties.name) {
-        //     parse the context properties here
-        // }
+                case ko.observable("substract"):
+                    this.result = this._substract(this.firstNumber, this.secondNumber)
+                    break;
+
+                case ko.observable("divide"):
+                    this.result = this._divide(this.firstNumber, this.secondNumber)
+                    break;
+
+                case ko.observable("multiply"):
+                    this.result = this._multiply(this.firstNumber, this.secondNumber)
+                    break;
+            }
+
+            // Set value to response field
+            var node: any = document.getElementById("result");
+            var busyContext = Context.getContext(node).getBusyContext();
+
+            busyContext.whenReady().then(function () {
+                var node: any = document.getElementById("result");
+                node.value = this.result
+            });
+
+            //Raise the custom event
+            this.composite.dispatchEvent(new CustomEvent('onCalculate', {}));
+        }
+
+        this._add = (num1, num2) : ko.Observable<number> => {
+            return ko.observable(num1 + num2)
+        }
+
+        this._substract = (num1, num2) : ko.Observable<number> => {
+            return ko.observable(num1 - num2)
+        }
+
+        this._divide = (num1, num2) : ko.Observable<number> => {
+            return ko.observable(num1 / num2)
+        }
+
+        this._multiply = (num1, num2) : ko.Observable<number> => {
+            return ko.observable(num1 * num2)
+        }
 
         //Once all startup and async activities have finished, relocate if there are any async activities
         this.busyResolve(); 
-    }
-
-    _add(num1, num2) : ko.Observable<number>{
-        return ko.observable(num1 + num2)
-    }
-
-    _substract(num1, num2) : ko.Observable<number>{
-        return ko.observable(num1 - num2)
-    }
-
-    _divide(num1, num2) : ko.Observable<number>{
-        return ko.observable(num1 / num2)
-    }
-
-    _multiply(num1, num2) : ko.Observable<number>{
-        return ko.observable(num1 * num2)
-    }
-
-    onCalculate(event) {
-        // Do operation
-        switch(this.operation) {
-            case ko.observable("sum"):
-                this.result = this._add(this.firstNumber, this.secondNumber)
-                break;
-
-            case ko.observable("substract"):
-                this.result = this._substract(this.firstNumber, this.secondNumber)
-                break;
-
-            case ko.observable("divide"):
-                this.result = this._divide(this.firstNumber, this.secondNumber)
-                break;
-
-            case ko.observable("multiply"):
-                this.result = this._multiply(this.firstNumber, this.secondNumber)
-                break;
-        }
-
-        // Set value to response field
-        var node: any = document.getElementById("result");
-        var busyContext = Context.getContext(node).getBusyContext();
-
-        busyContext.whenReady().then(function () {
-            var node: any = document.getElementById("result");
-            node.value = this.result
-        });
-
-        //Raise the custom event
-        this.composite.dispatchEvent(new CustomEvent('onCalculate', {}));
     }
 
     //Lifecycle methods - implement if necessary 
