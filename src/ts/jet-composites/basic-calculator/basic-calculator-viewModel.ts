@@ -15,13 +15,13 @@ import "ojs/ojbutton";
 export default class ViewModel implements Composite.ViewModel<Composite.PropertiesType> {
     busyResolve: (() => void);
     composite: Element;
-    messageText: ko.Observable<string>;
+   
     properties: Composite.PropertiesType;
     res: { [key: string]: string };
-    firstNumber: ko.Observable<number>;
-    secondNumber: ko.Observable<number>;
-    operation: ko.Observable<string>;
-    result: ko.Observable<number>;
+    firstNumber: number;
+    secondNumber: number;
+    operation: string;
+    result: number;
     operationsSDP: ko.Observable<any>;
     onCalculate: Function;
     _add: Function;
@@ -41,7 +41,6 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
         this.composite = context.element;
 
         //Example observable
-        this.messageText = ko.observable("Hello from basic-calculator");
         this.properties = context.properties;
         this.res = componentStrings["basic-calculator"];
 
@@ -49,10 +48,10 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
 
 
         /** Custom code */
-        this.firstNumber = ko.observable(0)
-        this.secondNumber = ko.observable(0)
-        this.operation = ko.observable('sum')
-        this.result = ko.observable(0)
+        this.firstNumber = 0
+        this.secondNumber = 0
+        this.operation = 'sum'
+        this.result = 0
 
         // Parsing context properties
         if (context.properties.firstNumber) {
@@ -83,50 +82,55 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
         this.onCalculate = (event:Event, model: object): void => {
             // Do operation
             switch(this.operation) {
-                case ko.observable("sum"):
+                case "sum":
                     this.result = this._add(this.firstNumber, this.secondNumber)
                     break;
 
-                case ko.observable("substract"):
+                case "substract":
                     this.result = this._substract(this.firstNumber, this.secondNumber)
                     break;
 
-                case ko.observable("divide"):
+                case "divide":
                     this.result = this._divide(this.firstNumber, this.secondNumber)
                     break;
 
-                case ko.observable("multiply"):
+                case "multiply":
                     this.result = this._multiply(this.firstNumber, this.secondNumber)
                     break;
             }
 
             // Set value to response field
+            let result = this.result
+            console.log(result)
+            
             var node: any = document.getElementById("result");
             var busyContext = Context.getContext(node).getBusyContext();
 
             busyContext.whenReady().then(function () {
                 var node: any = document.getElementById("result");
-                node.value = this.result
+                console.log(node)
+                console.log(result)
+                node.value = result
             });
 
             //Raise the custom event
             this.composite.dispatchEvent(new CustomEvent('onCalculate', {}));
         }
 
-        this._add = (num1, num2) : ko.Observable<number> => {
-            return ko.observable(num1 + num2)
+        this._add = (num1, num2) : number => {
+            return num1 + num2
         }
 
-        this._substract = (num1, num2) : ko.Observable<number> => {
-            return ko.observable(num1 - num2)
+        this._substract = (num1, num2) : number => {
+            return num1 - num2
         }
 
-        this._divide = (num1, num2) : ko.Observable<number> => {
-            return ko.observable(num1 / num2)
+        this._divide = (num1, num2) : number => {
+            return num1 / num2
         }
 
-        this._multiply = (num1, num2) : ko.Observable<number> => {
-            return ko.observable(num1 * num2)
+        this._multiply = (num1, num2) : number => {
+            return num1 * num2
         }
 
         //Once all startup and async activities have finished, relocate if there are any async activities
