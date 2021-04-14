@@ -1,0 +1,103 @@
+{
+  "name": "basic-calculator",
+  "version": "1.0.0",
+  "jetVersion": "^10.0.0",
+  "displayName": "Basic calculator",
+  "description": "This calculator performs sum, subtract, mul",
+  "properties": {
+    "firstNumber": {
+      "description":"First parameter for calculator",
+      "type":"number"
+    },
+    "secondNumber": {
+      "description":"Second parameter for calculator",
+      "type":"number"
+    },
+    "operation": {
+      "description":"Default operation to perform",
+      "type":"string"
+    }
+  },
+  "methods": {
+    "add": {
+      "description": "Sum two numbers",
+      "internalName": "_add",
+      "params":[
+        {
+          "description":"First number",
+          "name" : "first",
+          "type": "number"
+        },
+        {
+          "description":"Second number",
+          "name" : "second",
+          "type": "number"
+        }
+      ],
+      "return":"number"
+    },
+
+    "subtract": {
+      "description": "Subtract two numbers",
+      "internalName": "_subtract",
+      "params":[
+        {
+          "description":"First number",
+          "name" : "first",
+          "type": "number"
+        },
+        {
+          "description":"Second number",
+          "name" : "second",
+          "type": "number"
+        }
+      ],
+      "return":"number"
+    },
+
+    "multiply": {
+      "description": "Multiply two numbers",
+      "internalName": "_multiply",
+      "params":[
+        {
+          "description":"First number",
+          "name" : "first",
+          "type": "number"
+        },
+        {
+          "description":"Second number",
+          "name" : "second",
+          "type": "number"
+        }
+      ],
+      "return":"number"
+    },
+
+    "divide": {
+      "description": "Divide two numbers",
+      "internalName": "_divide",
+      "params":[
+        {
+          "description":"First number",
+          "name" : "first",
+          "type": "number"
+        },
+        {
+          "description":"Second number",
+          "name" : "second",
+          "type": "number"
+        }
+      ],
+      "return":"number"
+    }
+  }, 
+  "events": {
+    "onCalculate":{
+      "description":"Logic to be triggered when Calculate button is clicked",
+      "bubbles": true
+    }
+  }, 
+  "slots": {
+
+  }
+}
