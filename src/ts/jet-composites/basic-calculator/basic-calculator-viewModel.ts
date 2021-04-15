@@ -8,6 +8,7 @@ import ArrayDataProvider = require("ojs/ojarraydataprovider");
 import "ojs/ojformlayout";
 import "ojs/ojselectsingle";
 import "ojs/ojinputtext";
+import "ojs/ojinputnumber";
 import "ojs/ojbutton";
 
 export default class ViewModel implements Composite.ViewModel<Composite.PropertiesType> {
@@ -51,16 +52,13 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
         this.operation = 'sum'
         this.result = 0
 
-
-        console.log(this.properties)
-
         // Parsing context properties
-        if (context.properties.firstNumber) {
-            this.firstNumber = context.properties.firstNumber
+        if (context.properties.firstnumber) {
+            this.firstNumber = context.properties.firstnumber
         }
 
-        if (context.properties.secondNumber) {
-            this.secondNumber = context.properties.secondNumber
+        if (context.properties.secondnumber) {
+            this.secondNumber = context.properties.secondnumber
         }
 
         if (context.properties.operation) {
@@ -81,8 +79,6 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
 
 
         this.onCalculate = (event:Event, model: object): void => {
-
-            console.log("-------------EVENT-----------")
 
             // Do operation
             let first = Number(this.firstNumber)
@@ -107,15 +103,12 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
 
             // Set value to response field
             let result = this.result
-            //console.log(result)
             
             var node: any = document.getElementById("result");
             var busyContext = Context.getContext(node).getBusyContext();
 
             busyContext.whenReady().then(function () {
                 var node: any = document.getElementById("result");
-                //console.log(node)
-                //console.log(result)
                 node.value = result
             });
 

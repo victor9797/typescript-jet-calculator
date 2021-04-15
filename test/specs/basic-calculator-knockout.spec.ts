@@ -15,8 +15,8 @@ describe('basic-calculator CCA unit tests with Knockout', () => {
     <div>
       <h1>Calculator Demo Page</h1>
         <basic-calculator 
-          firstNumber="{{firstNumber}}"
-          secondNumber="{{secondNumber}}"
+          firstnumber="{{firstnumber}}"
+          secondnumber="{{secondnumber}}"
           operation="{{operation}}">
         </basic-calculator>
     </div>
@@ -33,10 +33,9 @@ describe('basic-calculator CCA unit tests with Knockout', () => {
     expect(calculator).not.to.be.null;
     // Apply our viewmodel to the Knockout bindings
     ko.applyBindings({
-      firstNumber: 1,
-      secondNumber: 2,
-      operation: 'sum',
-      result: 90
+      firstnumber: '1',
+      secondnumber: '2',
+      operation: 'sum'
     }, calculator);
     // Wait for BusyContext to clear for the element
     await Context.getContext(calculator).getBusyContext().whenReady();
@@ -51,26 +50,26 @@ describe('basic-calculator CCA unit tests with Knockout', () => {
       expect(calculator).not.to.be.null;
     });
 
-    it('Sum works', async () => {
+    it('Verify add operation', async () => {
+      // Arrange
       const constButton = calculator.querySelector('#icon_button') as HTMLElement;
-      //console.log(constButton)
       expect(constButton).not.to.be.null;
+
+      // Act
       constButton.click();
+      await Context.getContext(calculator).getBusyContext().whenReady();
 
-      await sleep(1000000);
-
+      // Assert
       const result = calculator.querySelector('#result') as HTMLElement;
-      //console.log(result)
       expect(result).not.to.be.null;
-      console.log("Inner text", result.innerText);
-      console.log("Text content", result.textContent);
-      console.log("Value", result.getAttribute('value'));
-      // await Context.getContext(constButton).getBusyContext().whenReady();
+      const resultValue = result.querySelector('.oj-text-field-readonly') as HTMLElement;
+      expect(resultValue).not.to.be.null;
+      expect(resultValue.innerText).to.be.equal('3');
     });
 
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    // function sleep(ms) {
+    //   return new Promise(resolve => setTimeout(resolve, ms));
+    // }
 
     afterEach(() => fixture.cleanup());
   });

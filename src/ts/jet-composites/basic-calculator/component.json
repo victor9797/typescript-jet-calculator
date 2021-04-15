@@ -5,11 +5,11 @@
   "displayName": "Basic calculator",
   "description": "This calculator performs sum, subtract, mul",
   "properties": {
-    "firstNumber": {
+    "firstnumber": {
       "description":"First parameter for calculator",
       "type":"string"
     },
-    "secondNumber": {
+    "secondnumber": {
       "description":"Second parameter for calculator",
       "type":"string"
     },
