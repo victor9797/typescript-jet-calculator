@@ -29,6 +29,7 @@
     "experimentalDecorators": true
   },
   "include": [
-    "./src/ts/**/*"
+    "./src/ts/**/*",
+    "./node_modules/@oracle/oraclejet/dist/types/requirejs-plugins.d.ts"
   ]
 }

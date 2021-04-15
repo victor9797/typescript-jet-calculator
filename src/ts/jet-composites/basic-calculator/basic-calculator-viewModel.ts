@@ -7,7 +7,7 @@ import Composite = require("ojs/ojcomposite");
 import ArrayDataProvider = require("ojs/ojarraydataprovider");
 import "ojs/ojformlayout";
 import "ojs/ojselectsingle";
-import "ojs/ojinputnumber";
+import "ojs/ojinputtext";
 import "ojs/ojbutton";
 
 export default class ViewModel implements Composite.ViewModel<Composite.PropertiesType> {
@@ -16,8 +16,8 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
    
     properties: Composite.PropertiesType;
     res: { [key: string]: string };
-    firstNumber: number;
-    secondNumber: number;
+    firstNumber: string;
+    secondNumber: string;
     operation: string;
     result: number;
     operationsSDP: ko.Observable<any>;
@@ -46,10 +46,13 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
 
 
         /** Custom code */
-        this.firstNumber = 0
-        this.secondNumber = 0
+        this.firstNumber = '0'
+        this.secondNumber = '0'
         this.operation = 'sum'
         this.result = 0
+
+
+        console.log(this.properties)
 
         // Parsing context properties
         if (context.properties.firstNumber) {
@@ -78,36 +81,41 @@ export default class ViewModel implements Composite.ViewModel<Composite.Properti
 
 
         this.onCalculate = (event:Event, model: object): void => {
+
+            console.log("-------------EVENT-----------")
+
             // Do operation
+            let first = Number(this.firstNumber)
+            let second = Number(this.secondNumber)
             switch(this.operation) {
                 case "sum":
-                    this.result = this._add(this.firstNumber, this.secondNumber)
+                    this.result = this._add(first, second)
                     break;
 
                 case "substract":
-                    this.result = this._substract(this.firstNumber, this.secondNumber)
+                    this.result = this._substract(first, second)
                     break;
 
                 case "divide":
-                    this.result = this._divide(this.firstNumber, this.secondNumber)
+                    this.result = this._divide(first, second)
                     break;
 
                 case "multiply":
-                    this.result = this._multiply(this.firstNumber, this.secondNumber)
+                    this.result = this._multiply(first, second)
                     break;
             }
 
             // Set value to response field
             let result = this.result
-            console.log(result)
+            //console.log(result)
             
             var node: any = document.getElementById("result");
             var busyContext = Context.getContext(node).getBusyContext();
 
             busyContext.whenReady().then(function () {
                 var node: any = document.getElementById("result");
-                console.log(node)
-                console.log(result)
+                //console.log(node)
+                //console.log(result)
                 node.value = result
             });
 

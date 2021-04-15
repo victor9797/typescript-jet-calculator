@@ -1,17 +1,17 @@
 {
   "name": "basic-calculator",
   "version": "1.0.0",
-  "jetVersion": "10.0.0",
+  "jetVersion": "~10.0.0",
   "displayName": "Basic calculator",
   "description": "This calculator performs sum, subtract, mul",
   "properties": {
     "firstNumber": {
       "description":"First parameter for calculator",
-      "type":"number"
+      "type":"string"
     },
     "secondNumber": {
       "description":"Second parameter for calculator",
-      "type":"number"
+      "type":"string"
     },
     "operation": {
       "description":"Default operation to perform",
