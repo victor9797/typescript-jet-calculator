@@ -1,7 +1,7 @@
 {
   "name": "basic-calculator",
   "version": "1.0.0",
-  "jetVersion": "^10.0.0",
+  "jetVersion": "10.0.0",
   "displayName": "Basic calculator",
   "description": "This calculator performs sum, subtract, mul",
   "properties": {
